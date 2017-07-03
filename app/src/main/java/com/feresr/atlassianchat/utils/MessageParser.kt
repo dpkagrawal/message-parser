@@ -1,6 +1,6 @@
 package com.feresr.atlassianchat.utils
 
-import com.feresr.atlassianchat.provider.NodeProvider
+import com.feresr.atlassianchat.parser.Parser
 import org.json.JSONObject
 import rx.Observable
 import rx.Single
@@ -10,8 +10,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * Parses a message and creates a JSONObject with the nodes provided
- * by each NodeProvider
+ * Parses a message and creates a [JSONObject] with the nodes provided by each Parser
  */
 @Singleton
 class MessageParser @Inject constructor() {
@@ -19,18 +18,18 @@ class MessageParser @Inject constructor() {
     private val INDENTATIONS = 3
 
     @Inject
-    lateinit var nodeProviders: Array<NodeProvider>
+    lateinit var parsers: Array<Parser>
 
     /**
-     * Creates an observable from each node provider and builds a JSONObject with
+     * Creates an [Observable] parse each node provider and builds a [JSONObject] with
      * the values returned by them
      * @param message String to parse
      * @return Single that emits a json formatted string
      */
     fun parse(message: String): Single<String> {
         return Observable
-                .from(nodeProviders)
-                .flatMapSingle { it.from(message).subscribeOn(Schedulers.computation()) }
+                .from(parsers)
+                .flatMapSingle { it.parse(message).subscribeOn(Schedulers.computation()) }
                 .collect({ JSONObject() },
                         { json: JSONObject, (key, value) ->
                             json.put(key, value)

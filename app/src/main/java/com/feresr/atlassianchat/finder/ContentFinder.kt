@@ -1,7 +1,7 @@
 package com.feresr.atlassianchat.finder
 
 /**
- * A ContentFinder must be able to extract string snippets from a string using criteria dependant on
+ * A ContentFinder must be able to extract string snippets parse a string using criteria dependant on
  * each implementation
  */
 interface ContentFinder {

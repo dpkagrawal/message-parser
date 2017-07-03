@@ -4,9 +4,9 @@ import com.feresr.atlassianchat.finder.EmoticonFinder
 import com.feresr.atlassianchat.finder.HTMLTitleFinder
 import com.feresr.atlassianchat.finder.LinkFinder
 import com.feresr.atlassianchat.finder.MentionFinder
-import com.feresr.atlassianchat.provider.LinkNodeProvider
-import com.feresr.atlassianchat.provider.NodeProvider
-import com.feresr.atlassianchat.provider.SimpleNodeProvider
+import com.feresr.atlassianchat.parser.LinkParser
+import com.feresr.atlassianchat.parser.Parser
+import com.feresr.atlassianchat.parser.SimpleParser
 import com.feresr.atlassianchat.utils.TitleRetriever
 import dagger.Module
 import dagger.Provides
@@ -14,31 +14,28 @@ import okhttp3.OkHttpClient
 import javax.inject.Named
 import javax.inject.Singleton
 
-/**
- * Created by feresr on 26/6/17.
- */
 @Module
 class AppModule {
 
     @Provides
     @Singleton
     @Named("emoticon")
-    fun provideEmoticonFinder(emoticonFinder: EmoticonFinder): NodeProvider {
-        return SimpleNodeProvider(emoticonFinder, "emoticons")
+    fun provideEmoticonParser(emoticonFinder: EmoticonFinder): Parser {
+        return SimpleParser(emoticonFinder, "emoticons")
     }
 
     @Provides
     @Singleton
     @Named("mention")
-    fun provideMentionFinder(mentionFinder: MentionFinder): NodeProvider {
-        return SimpleNodeProvider(mentionFinder, "mentions")
+    fun provideMentionParser(mentionFinder: MentionFinder): Parser {
+        return SimpleParser(mentionFinder, "mentions")
     }
 
     @Provides
     @Singleton
     @Named("link")
-    fun provideLinkFinder(linkFinder: LinkFinder, titleRetriever: TitleRetriever): NodeProvider {
-        return LinkNodeProvider(linkFinder, titleRetriever)
+    fun provideLinkParser(linkFinder: LinkFinder, titleRetriever: TitleRetriever): Parser {
+        return LinkParser(linkFinder, titleRetriever)
     }
 
     @Provides
@@ -47,9 +44,9 @@ class AppModule {
     }
 
     @Provides
-    fun provideParsers(@Named("emoticon") emoticonNodeProvider: NodeProvider,
-                       @Named("mention") mentionNodeProvider: NodeProvider,
-                       @Named("link") linkNodeProvider: NodeProvider): Array<NodeProvider> {
-        return arrayOf(emoticonNodeProvider, mentionNodeProvider, linkNodeProvider)
+    fun provideParsers(@Named("emoticon") emoticonParser: Parser,
+                       @Named("mention") mentionParser: Parser,
+                       @Named("link") linkParser: Parser): Array<Parser> {
+        return arrayOf(emoticonParser, mentionParser, linkParser)
     }
 }

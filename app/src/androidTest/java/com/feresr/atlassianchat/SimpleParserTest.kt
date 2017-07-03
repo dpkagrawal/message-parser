@@ -3,7 +3,7 @@ package com.feresr.atlassianchat
 import android.support.test.runner.AndroidJUnit4
 import com.feresr.atlassianchat.finder.ContentFinder
 import com.feresr.atlassianchat.model.JSONNode
-import com.feresr.atlassianchat.provider.SimpleNodeProvider
+import com.feresr.atlassianchat.parser.SimpleParser
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -19,15 +19,15 @@ import rx.observers.TestSubscriber
  * See [testing documentation](http://d.android.com/tools/testing).
  */
 @RunWith(AndroidJUnit4::class)
-class SimpleNodeProviderTest {
+class SimpleParserTest {
 
-    lateinit var simpleNodeProvider: SimpleNodeProvider
+    lateinit var simpleNodeProvider: SimpleParser
     var finder: ContentFinder = mock(ContentFinder::class.java)
     val NODE_NAME = "name"
 
     @Before
     fun setUp() {
-        simpleNodeProvider = SimpleNodeProvider(finder, NODE_NAME)
+        simpleNodeProvider = SimpleParser(finder, NODE_NAME)
     }
 
     @Test
@@ -35,7 +35,7 @@ class SimpleNodeProviderTest {
         val input = "Empty Test"
 
         Mockito.`when`(finder.findAll(input)).thenReturn(emptySet<String>())
-        val single = simpleNodeProvider.from(input)
+        val single = simpleNodeProvider.parse(input)
         val testSubscriber = TestSubscriber<JSONNode>()
         single.subscribe(testSubscriber)
 
@@ -54,7 +54,7 @@ class SimpleNodeProviderTest {
         val output = "emoticon"
 
         Mockito.`when`(finder.findAll(input)).thenReturn(setOf(output))
-        val single = simpleNodeProvider.from(input)
+        val single = simpleNodeProvider.parse(input)
         val testSubscriber = TestSubscriber<JSONNode>()
         single.subscribe(testSubscriber)
 

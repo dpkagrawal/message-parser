@@ -5,7 +5,6 @@ import java.util.regex.Pattern
 import javax.inject.Inject
 
 /**
- * Created by feresr on 29/6/17.
  * Uses Regular Expressions to find content within input text
  */
 open class RegexContentFinder @Inject constructor(val pattern: Pattern) : ContentFinder {
@@ -25,7 +24,7 @@ open class RegexContentFinder @Inject constructor(val pattern: Pattern) : Conten
     }
 
     /**
-     * Like findAll() but only finds and return the first value
+     * Like [RegexContentFinder::findAll(String)] but only finds and return the first value
      * @see findAll
      * @return String first match in text, or null if none
      */

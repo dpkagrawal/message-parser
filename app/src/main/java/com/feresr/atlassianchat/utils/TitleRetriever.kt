@@ -6,7 +6,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 
 /**
- * Extracts fetches the html body form a given url and uses HTMLTitleFinder to find
+ * Extracts fetches the html body form a given url and uses [HTMLTitleFinder] to find
  * the string within the html tag <Title>
  */
 open class TitleRetriever(private val client: OkHttpClient, val finder: HTMLTitleFinder) {

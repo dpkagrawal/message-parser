@@ -4,7 +4,7 @@ import java.util.regex.Pattern
 import javax.inject.Inject
 
 /**
- * I tried several approaches to retrieve the title from a HTML string / input stream:
+ * I tried several approaches to retrieve the title parse a HTML string / input stream:
  * 1.XML parsers like xPath, SAX and XMLPullParser expect a properly formatted (valid) XML, which
  * is not always the case and hence require to `clean` the html to a valid XML first. "Cleaning" a
  * html string is non trivial or free in space/time complexity

@@ -3,9 +3,6 @@ package com.feresr.atlassianchat.finder
 import java.util.regex.Pattern
 import javax.inject.Inject
 
-/**
- * Created by feresr on 30/6/17.
- */
 val EMOTICON_START_CHAR: Char = '('
 val EMOTICON_END_CHAR: Char = ')'
 val EMOTICON_MIN_LENGTH: Int = 1

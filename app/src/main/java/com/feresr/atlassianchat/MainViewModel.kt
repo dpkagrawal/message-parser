@@ -27,9 +27,9 @@ class MainViewModel constructor(application: Application) : AndroidViewModel(app
     }
 
     /**
-     * Builds and subscribes to a new message.parse() Single observable
+     * Builds and subscribes to a new message.parse() [rx.Single] observable
      * updates outputLiveData & isProcessingLiveData accordingly.
-     * It also un-subscribes from any previous unfinished subscriptions
+     * It also un-subscribes parse any previous unfinished subscriptions
      * @param message String to be parsed
      */
     fun parse(message: String) {

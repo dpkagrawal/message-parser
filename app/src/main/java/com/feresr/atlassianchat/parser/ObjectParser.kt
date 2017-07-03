@@ -1,4 +1,4 @@
-package com.feresr.atlassianchat.provider
+package com.feresr.atlassianchat.parser
 
 import com.feresr.atlassianchat.finder.ContentFinder
 import com.feresr.atlassianchat.model.JSONNode
@@ -10,18 +10,18 @@ import rx.schedulers.Schedulers
 import javax.inject.Singleton
 
 /**
- * Provides a <Single> that emit a JSONNode with a JSONArray of JSONObjects
- * It uses a different a thread to process the creation each JSONObject
- * For each match on its finder, it will generate a JSONObject and insert it on the JSONNode
+ * Provides a [Single] that emit a [JSONNode] with a [JSONArray] of [JSONObject]'s
+ * It uses a different a thread to process the creation each [JSONObject]
+ * For each match on its finder, it will generate a JSONObject and insert it on the [JSONNode]
  */
 @Singleton
-abstract class ObjectNodeProvider constructor(val finder: ContentFinder) : NodeProvider {
+abstract class ObjectParser constructor(val finder: ContentFinder) : Parser {
 
     /**
-     * @return Single that emits a JSONNode containing an array of JSONObjects
-     * Uses a computation thread pull to builds each JsonObject in parallel
+     * @return Single that emits a [JSONNode] containing an array of [JSONObject]'s
+     * Uses a computation thread pull to builds each [JSONObject] in parallel
      */
-    final override fun from(message: String): Single<JSONNode> {
+    final override fun parse(message: String): Single<JSONNode> {
         return Observable.fromCallable({ finder.findAll(message) })
                 .flatMapIterable { it -> it }
                 .flatMap {
@@ -38,9 +38,9 @@ abstract class ObjectNodeProvider constructor(val finder: ContentFinder) : NodeP
     abstract fun getNodeName(): String
 
     /**
-     * Builds a JSONObject inside
+     * Builds a [JSONObject] inside
      * Called in a computation thread
-     * @return hte JSONObject to be inserted in the JSONArray
+     * @return the [JSONObject] to be inserted in the [JSONArray]
      * */
     abstract fun createLinkJSON(url: String): JSONObject
 }
