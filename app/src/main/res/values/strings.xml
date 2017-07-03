@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">AtlassianChat</string>
     <string name="input_default_text">Write a message below and I will parse its @mentions, (emoticons) and `links.com`</string>
-    <string name="send">SEND</string>
+    <string name="parse">PARSE</string>
 </resources>

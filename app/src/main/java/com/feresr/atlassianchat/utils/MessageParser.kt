@@ -18,7 +18,15 @@ class MessageParser @Inject constructor() {
     private val INDENTATIONS = 3
 
     @Inject
-    lateinit var parsers: Array<Parser>
+    lateinit var parsers: ArrayList<Parser>
+
+    /**
+     * I'm injecting the required [Parser]'s at build time For this sample project
+     * Depending on the Use case one could require to add new parsers at runtime.
+     */
+    fun addParser(parser: Parser) {
+        parsers.add(parser)
+    }
 
     /**
      * Creates an [Observable] parse each node provider and builds a [JSONObject] with

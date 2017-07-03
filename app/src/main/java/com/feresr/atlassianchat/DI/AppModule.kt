@@ -46,7 +46,7 @@ class AppModule {
     @Provides
     fun provideParsers(@Named("emoticon") emoticonParser: Parser,
                        @Named("mention") mentionParser: Parser,
-                       @Named("link") linkParser: Parser): Array<Parser> {
-        return arrayOf(emoticonParser, mentionParser, linkParser)
+                       @Named("link") linkParser: Parser): ArrayList<Parser> {
+        return arrayListOf(emoticonParser, mentionParser, linkParser)
     }
 }
