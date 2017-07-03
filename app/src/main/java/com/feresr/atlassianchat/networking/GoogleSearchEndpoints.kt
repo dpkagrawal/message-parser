@@ -17,5 +17,8 @@ interface GoogleSearchEndpoints {
         const val ITEMS: String = "items"
         const val TITLE: String = "title"
         const val BASE_URL = "https://www.googleapis.com/"
+
+        const val PARAM_KEY = "key"
+        const val PARAM_CX = "cx"
     }
 }

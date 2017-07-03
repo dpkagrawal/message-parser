@@ -12,11 +12,6 @@ import org.mockito.Mockito.anyString
 import org.mockito.Mockito.mock
 import retrofit2.mock.Calls
 
-/**
- * Instrumented test, which will execute on an Android device.
- *
- * See [testing documentation](http://d.android.com/tools/testing).
- */
 class LinkMapperTest {
 
     var searchEndpoints: GoogleSearchEndpoints = mock(GoogleSearchEndpoints::class.java)

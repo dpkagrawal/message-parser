@@ -16,7 +16,6 @@ class MainActivity : LifecycleActivity() {
         setContentView(R.layout.activity_main)
 
         val viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
-        (application as Application).component.inject(this)
 
         viewModel.outputLiveData.observe(this, Observer<String> { outputString ->
             messageResultTextView.text = outputString

@@ -5,6 +5,7 @@ import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.MutableLiveData
 import com.feresr.parser.MessageParser
 import com.feresr.parser.Parser
+import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import rx.SingleSubscriber
@@ -21,10 +22,12 @@ class MainViewModel constructor(application: Application) : AndroidViewModel(app
 
     var outputLiveData = MutableLiveData<String>()
     var isProcessingLiveData = MutableLiveData<Boolean>()
-    var subscription: Subscription? = null
+    private var subscription: Subscription? = null
 
     @Inject
     lateinit var messageParser: MessageParser
+
+    private val gson: Gson = GsonBuilder().setPrettyPrinting().create()
 
     @field:[Inject Named("mention")]
     lateinit var mentionParser: Parser
@@ -57,7 +60,7 @@ class MainViewModel constructor(application: Application) : AndroidViewModel(app
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(object : SingleSubscriber<JsonObject>() {
                     override fun onSuccess(result: JsonObject?) {
-                        outputLiveData.value = GsonBuilder().setPrettyPrinting().create().toJson(result) ?: ""
+                        outputLiveData.value = gson.toJson(result) ?: ""
                         isProcessingLiveData.value = false
                     }
 

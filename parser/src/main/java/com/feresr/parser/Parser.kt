@@ -30,7 +30,6 @@ class Parser constructor(private val finder: ContentFinder,
                                 .filter({ it != null })
                                 .subscribeOn(Schedulers.computation())
                     } else {
-                        //I believe this can be avoided with a conditional .compose() call
                         Observable.just(it)
                     }
                 }

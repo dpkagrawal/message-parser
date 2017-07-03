@@ -4,12 +4,6 @@ import com.feresr.atlassianchat.finders.LinkFinder
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-
-/**
- * Example local unit test, which will execute on the development machine (host).
- *
- * See [testing documentation](http://d.android.com/tools/testing).
- */
 class LinkFinderTest {
 
     var linkFinder: LinkFinder = LinkFinder()
@@ -26,11 +20,12 @@ class LinkFinderTest {
         assertEquals("Simple case 7", setOf("https://atlassian.com/android_ios"), linkFinder.findAll("https://atlassian.com/android_ios/"))
         assertEquals("Simple case 8", setOf("jira.atlassian.com/secure"), linkFinder.findAll("jira.atlassian.com/secure"))
         assertEquals("Simple case 9", setOf("jira.atlassian.com/secure/Dashboard.jspa"), linkFinder.findAll("jira.atlassian.com/secure/Dashboard.jspa"))
+        assertEquals("!", setOf("en.wikipedia.org/wiki/yahoo!"), linkFinder.findAll("en.wikipedia.org/wiki/yahoo!"))
     }
 
     @Test
     fun mixedTest() {
-        assertEquals("Mention is not an url", emptySet<String>(), linkFinder.findAll("@google.com"))
+        assertEquals("Mention & url", setOf("atlassian.com"), linkFinder.findAll("@atlassian.com"))
         assertEquals("Within parenthesis", setOf("atlassian.com"), linkFinder.findAll("(atlassian.com)"))
     }
 }
