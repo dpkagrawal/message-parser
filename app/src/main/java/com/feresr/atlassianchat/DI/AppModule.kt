@@ -1,14 +1,13 @@
 package com.feresr.atlassianchat.DI
 
-import com.feresr.atlassianchat.BuildConfig
-import com.feresr.atlassianchat.finder.EmoticonFinder
-import com.feresr.atlassianchat.finder.LinkFinder
-import com.feresr.atlassianchat.finder.MentionFinder
+import com.feresr.atlassianchat.finders.EmoticonFinder
+import com.feresr.atlassianchat.finders.LinkFinder
+import com.feresr.atlassianchat.finders.MentionFinder
 import com.feresr.atlassianchat.networking.GoogleSearchEndpoints
 import com.feresr.atlassianchat.networking.GoogleSearchInterceptor
-import com.feresr.atlassianchat.parser.LinkParser
-import com.feresr.atlassianchat.parser.Parser
-import com.feresr.atlassianchat.parser.SimpleParser
+import com.feresr.atlassianchat.LinkMapper
+import com.feresr.parser.MessageParser
+import com.feresr.parser.Parser
 import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
@@ -18,9 +17,14 @@ import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Named
 import javax.inject.Singleton
 
-
 @Module
 class AppModule {
+
+    @Provides
+    @Singleton
+    fun provideMessageParser(): MessageParser {
+        return MessageParser()
+    }
 
     @Provides
     fun provideGoogleSearchEndpoints(interceptor: GoogleSearchInterceptor): GoogleSearchEndpoints {
@@ -30,7 +34,7 @@ class AppModule {
         val retrofit = Retrofit.Builder()
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create(Gson()))
-                .baseUrl(BuildConfig.BASE_URL)
+                .baseUrl(GoogleSearchEndpoints.BASE_URL)
                 .build()
 
         return retrofit.create<GoogleSearchEndpoints>(GoogleSearchEndpoints::class.java)
@@ -40,27 +44,20 @@ class AppModule {
     @Singleton
     @Named("emoticon")
     fun provideEmoticonParser(emoticonFinder: EmoticonFinder): Parser {
-        return SimpleParser(emoticonFinder, "emoticons")
+        return Parser(emoticonFinder, "emoticons")
     }
 
     @Provides
     @Singleton
     @Named("mention")
     fun provideMentionParser(mentionFinder: MentionFinder): Parser {
-        return SimpleParser(mentionFinder, "mentions")
+        return Parser(mentionFinder, "mentions")
     }
 
     @Provides
     @Singleton
     @Named("link")
-    fun provideLinkParser(linkFinder: LinkFinder, googleSearchEndpoints: GoogleSearchEndpoints): Parser {
-        return LinkParser(linkFinder, googleSearchEndpoints)
-    }
-
-    @Provides
-    fun provideParsers(@Named("emoticon") emoticonParser: Parser,
-                       @Named("mention") mentionParser: Parser,
-                       @Named("link") linkParser: Parser): ArrayList<Parser> {
-        return arrayListOf(emoticonParser, mentionParser, linkParser)
+    fun provideLinkParser(linkFinder: LinkFinder, linkMapper: LinkMapper): Parser {
+        return Parser(linkFinder, "links", linkMapper)
     }
 }

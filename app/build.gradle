@@ -21,7 +21,6 @@ android {
 
         buildConfigField("String", "CUSTOM_SEARCH_APIKEY", CUSTOM_SEARCH_APIKEY)
         buildConfigField("String", "CUSTOM_SEARCH_ENGINEID", CUSTOM_SEARCH_ENGINEID)
-        buildConfigField("String", "BASE_URL", BASE_URL)
     }
     buildTypes {
         release {
@@ -44,23 +43,19 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-core:2.8.47'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
-
     androidTestCompile 'com.google.dexmaker:dexmaker-mockito:1.2'
-
     //dagger
     compile 'com.google.dagger:dagger:2.11'
     kapt 'com.google.dagger:dagger-compiler:2.11'
-
     //rx
     compile 'io.reactivex:rxandroid:1.2.1'
     compile 'io.reactivex:rxjava:1.3.0'
-
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
     compile 'com.squareup.retrofit2:converter-gson:2.3.0'
     compile 'com.squareup.retrofit2:retrofit-mock:2.3.0'
-
     //android arch components
-    compile "android.arch.lifecycle:runtime:1.0.0-alpha3"
-    compile "android.arch.lifecycle:extensions:1.0.0-alpha3"
+    compile 'android.arch.lifecycle:runtime:1.0.0-alpha3'
+    compile 'android.arch.lifecycle:extensions:1.0.0-alpha3'
     annotationProcessor "android.arch.lifecycle:compiler:1.0.0-alpha3"
+    compile project(':parser')
 }

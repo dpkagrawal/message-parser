@@ -1,5 +1,6 @@
-package com.feresr.atlassianchat.finder
+package com.feresr.atlassianchat.finders
 
+import com.feresr.parser.RegexContentFinder
 import java.util.regex.Pattern
 import javax.inject.Inject
 

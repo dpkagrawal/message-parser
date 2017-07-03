@@ -1,8 +1,9 @@
-package com.feresr.atlassianchat.finder
+package com.feresr.parser.interfaces
 
 /**
  * A ContentFinder must be able to extract string snippets parse a string using criteria dependant on
- * each implementation
+ * each implementation.
+ * @see RegexContentFinder
  */
 interface ContentFinder {
     /**
@@ -10,9 +11,4 @@ interface ContentFinder {
      * with the implementation
      */
     fun findAll(message: String): Set<String>
-
-    /**
-     * @return String first extracts of message that conform with the implementation
-     */
-    fun findFirst(message: String): String?
 }

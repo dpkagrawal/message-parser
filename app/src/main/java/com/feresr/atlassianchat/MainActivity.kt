@@ -7,14 +7,9 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import com.feresr.atlassianchat.utils.MessageParser
 import kotlinx.android.synthetic.main.activity_main.*
-import javax.inject.Inject
 
 class MainActivity : LifecycleActivity() {
-
-    @Inject
-    lateinit var messageParser: MessageParser
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

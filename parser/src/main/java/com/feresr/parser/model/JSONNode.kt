@@ -1,7 +1,6 @@
-package com.feresr.atlassianchat.model
+package com.feresr.parser.model
 
-import org.json.JSONArray
-import org.json.JSONObject
+import com.google.gson.JsonArray
 
 /**
  * Represents each node inside the resulting [JSONObject]
@@ -12,4 +11,4 @@ import org.json.JSONObject
  * @property key [String] representing the name of the Node
  * @property value [JSONArray] of items in the node
  */
-data class JSONNode(val key: String, val value: JSONArray)
+internal data class JSONNode(val key: String, val value: JsonArray)

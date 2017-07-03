@@ -1,9 +1,8 @@
-package com.feresr.atlassianchat.parser
+package com.feresr.atlassianchat
 
 import android.util.Log
-import com.feresr.atlassianchat.finder.LinkFinder
-import com.feresr.atlassianchat.model.JSONNode
 import com.feresr.atlassianchat.networking.GoogleSearchEndpoints
+import com.feresr.parser.interfaces.Mapper
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import org.json.JSONObject
@@ -12,28 +11,23 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * Provides a [rx.Single] that emits a [JSONNode]
- * with a JSONNode.value = JSONArray of [JSONObject]:
+ * Retrieves the title from each found link and maps them to a
+ * [JsonObject] with format = { "url": "link.com", "title": "url title" }
  */
 @Singleton
-class LinkParser @Inject constructor(linkFinder: LinkFinder,
-                                     private val searchEndpoints: GoogleSearchEndpoints) : ObjectParser(linkFinder) {
+class LinkMapper @Inject constructor(private val searchEndpoints: GoogleSearchEndpoints) : Mapper {
 
     val KEY_URL: String = "url"
     val KEY_TITLE: String = "title"
-
-    override fun getNodeName(): String {
-        return "links"
-    }
 
     /**
      * @param item the url string
      * @return [JSONObject] with the format { "url": item, "title": getUrtTitle(item) }
      */
-    override fun createJSONObject(item: String): JSONObject {
-        val result: JSONObject = JSONObject()
-        result.put(KEY_URL, item)
-        result.put(KEY_TITLE, getUrlTitle(item))
+    override fun toJsonObject(item: String): JsonObject {
+        val result: JsonObject = JsonObject()
+        result.addProperty(KEY_URL, item)
+        result.addProperty(KEY_TITLE, getUrlTitle(item))
         return result
     }
 
@@ -70,7 +64,7 @@ class LinkParser @Inject constructor(linkFinder: LinkFinder,
                 }
             }
         } catch (ignored: Exception) {
-            Log.e(LinkParser::class.java.simpleName, ignored.message)
+            Log.e(LinkMapper::class.java.simpleName, ignored.message)
         }
 
         return "Title not found :("

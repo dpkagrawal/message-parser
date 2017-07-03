@@ -1,6 +1,6 @@
 package com.feresr.atlassianchat
 
-import com.feresr.atlassianchat.finder.MentionFinder
+import com.feresr.atlassianchat.finders.MentionFinder
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

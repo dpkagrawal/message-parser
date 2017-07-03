@@ -1,6 +1,6 @@
 package com.feresr.atlassianchat
 
-import com.feresr.atlassianchat.finder.EmoticonFinder
+import com.feresr.atlassianchat.finders.EmoticonFinder
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -37,8 +37,8 @@ class EmoticonFinderTest {
 
     @Test
     fun mixedTest() {
-        assertEquals("Link is not an emoticon 1", emptySet<String>(), emoticonFinder.findAll("(www.atlassian.com)"))
-        assertEquals("Link is not an emoticon 2", emptySet<String>(), emoticonFinder.findAll("(atlassian.com)"))
-        assertEquals("Mention is not an emoticon", emptySet<String>(), emoticonFinder.findAll("(@notAnEmoticon)"))
+        assertEquals("Link is not an emoticonParser 1", emptySet<String>(), emoticonFinder.findAll("(www.atlassian.com)"))
+        assertEquals("Link is not an emoticonParser 2", emptySet<String>(), emoticonFinder.findAll("(atlassian.com)"))
+        assertEquals("Mention is not an emoticonParser", emptySet<String>(), emoticonFinder.findAll("(@notAnEmoticon)"))
     }
 }
