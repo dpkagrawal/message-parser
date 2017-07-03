@@ -7,7 +7,7 @@ import rx.Observable
 import rx.Single
 
 /**
- * Provides a Single that emit a [JSONNode] with a [JSONArray] of [String]
+ * Provides a Single that emit a [JSONNode] with a [JSONArray] of [String]s
  * For each match on its finder, it will generate a String and insert it on the Node
  * @property contentFinder [ContentFinder] the [ContentFinder] that will extract matches from the message
  * @property name [String] the name of the node

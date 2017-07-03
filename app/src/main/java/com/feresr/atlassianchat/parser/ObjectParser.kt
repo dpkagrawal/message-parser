@@ -10,7 +10,7 @@ import rx.schedulers.Schedulers
 import javax.inject.Singleton
 
 /**
- * Provides a [Single] that emit a [JSONNode] with a [JSONArray] of [JSONObject]'s
+ * Provides a [Single] that emit a [JSONNode] with a [JSONArray] of [JSONObject]s
  * It uses a different a thread to process the creation each [JSONObject]
  * For each match on its finder, it will generate a JSONObject and insert it on the [JSONNode]
  */
@@ -25,7 +25,8 @@ abstract class ObjectParser constructor(val finder: ContentFinder) : Parser {
         return Observable.fromCallable({ finder.findAll(message) })
                 .flatMapIterable { it -> it }
                 .flatMap {
-                    Observable.fromCallable({ createLinkJSON(it) })
+                    Observable.fromCallable({ createJSONObject(it) })
+                            .filter({ it != null })
                             .subscribeOn(Schedulers.computation())
                 }
                 .toList()
@@ -38,9 +39,9 @@ abstract class ObjectParser constructor(val finder: ContentFinder) : Parser {
     abstract fun getNodeName(): String
 
     /**
-     * Builds a [JSONObject] inside
      * Called in a computation thread
      * @return the [JSONObject] to be inserted in the [JSONArray]
+     * or null if a json object must not be created for this string
      * */
-    abstract fun createLinkJSON(url: String): JSONObject
+    abstract fun createJSONObject(item: String): JSONObject?
 }
