@@ -14,7 +14,7 @@ import rx.schedulers.Schedulers
 /**
  * Constructs a [Single] that emit a [JSONNode]
  * If a [Mapper] is provided, each item found by the ContentFinder will be mapped into a
- * JsonObject using a different computation() thread.
+ * [JsonObject] using a different computation() thread.
  */
 class Parser constructor(private val finder: ContentFinder,
                          private val name: String, private val mapper: Mapper? = null) {
@@ -22,13 +22,10 @@ class Parser constructor(private val finder: ContentFinder,
     /**
      * @return Single that emits a [JSONNode] containing an array of [JsonObject]'s
      * If a [Mapper] is passed in, each map will be performed on a computation thread
-     *
-     * CHALLENGE SIDE NOTE: If I had an API that was able to retrieve titles for multiple URL
-     * at a time (on a single http request), it would be relatively easy to modify this method to
-     * support that behaviour!
      */
     internal fun parse(message: String): Single<JSONNode> {
         return Observable.fromCallable({ finder.findAll(message) })
+                .doOnNext { mapper?.bulkAction(it) }
                 .flatMapIterable { it -> it }
                 .toJsonElement()
                 .collect({ JsonArray() },

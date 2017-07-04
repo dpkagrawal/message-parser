@@ -69,4 +69,12 @@ class LinkMapper @Inject constructor(private val searchEndpoints: GoogleSearchEn
 
         return "Title not found"
     }
+
+    /**
+     * CHALLENGE SIDE NOTE:
+     * If I had an API that was able to retrieve titles for multiple URL
+     * at a time (on a single http request), which would be optimal for this use case.
+     * I could just perform the call inside this method.
+     */
+    override fun bulkAction(items: Set<String>?) {}
 }

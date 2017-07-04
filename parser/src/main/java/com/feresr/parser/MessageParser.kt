@@ -27,8 +27,8 @@ class MessageParser {
     }
 
     /**
-     * Creates an [Observable] parse each node provider and builds a [JsonObject] with
-     * the values returned by them. Each provider runs on a different computation thread
+     * Creates an [Observable] that emits a single [JsonObject] built using the provided parsers
+     * Note: Each [Parser] runs on its own computation thread
      * @param message String to parse
      * @return Single that emits a json formatted string
      */
