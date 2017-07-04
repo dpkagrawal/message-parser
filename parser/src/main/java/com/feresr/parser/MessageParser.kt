@@ -7,6 +7,10 @@ import rx.schedulers.Schedulers
 
 /**
  * Parses a message and creates a [JsonObject] with the nodes provided by each [Parser]
+ * Sample usage:
+ * var parser: MessageParser = MessageParser()
+ * parser.addParser()
+ * parser.parse("some message")
  */
 class MessageParser {
 

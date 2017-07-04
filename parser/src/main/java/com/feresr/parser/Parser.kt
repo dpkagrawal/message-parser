@@ -4,7 +4,9 @@ import com.feresr.parser.interfaces.ContentFinder
 import com.feresr.parser.interfaces.Mapper
 import com.feresr.parser.model.JSONNode
 import com.google.gson.JsonArray
+import com.google.gson.JsonElement
 import com.google.gson.JsonObject
+import com.google.gson.JsonPrimitive
 import rx.Observable
 import rx.Single
 import rx.schedulers.Schedulers
@@ -24,22 +26,29 @@ class Parser constructor(private val finder: ContentFinder,
     internal fun parse(message: String): Single<JSONNode> {
         return Observable.fromCallable({ finder.findAll(message) })
                 .flatMapIterable { it -> it }
-                .flatMap {
-                    if (mapper != null) {
-                        Observable.fromCallable({ mapper.toJsonObject(it) })
-                                .filter({ it != null })
-                                .subscribeOn(Schedulers.computation())
-                    } else {
-                        Observable.just(it)
-                    }
-                }
+                .toJsonElement()
                 .collect({ JsonArray() },
                         { array: JsonArray, value ->
-                            when (value) {
-                                is JsonObject -> array.add(value)
-                                is String -> array.add(value)
-                            }
+                            array.add(value)
                         })
                 .map { JSONNode(name, it) }.toSingle()
     }
+
+    /**
+     * Converts each [String] into a [JsonElement], JsonObject OR JsonPrimitive
+     * depending on weather or not the mapper is set for this instance
+     */
+    private fun Observable<String>.toJsonElement(): Observable<JsonElement> {
+        if (mapper != null) {
+            return this.flatMap {
+                Observable.fromCallable({ mapper.toJsonObject(it) })
+                        .filter({ it != null })
+                        .subscribeOn(Schedulers.computation()) //perform each map on a different thread
+            }
+        } else {
+            return this.map { JsonPrimitive(it) }
+        }
+    }
 }
+
+

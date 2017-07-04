@@ -11,11 +11,12 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : LifecycleActivity() {
 
+    lateinit var viewModel : MainViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        val viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
+        viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
 
         viewModel.outputLiveData.observe(this, Observer<String> { outputString ->
             messageResultTextView.text = outputString
@@ -31,13 +32,15 @@ class MainActivity : LifecycleActivity() {
             }
         })
 
-        parseBtn.setOnClickListener {
-            val msg = messageEditText.text.toString()
-            messageTextView.text = msg
-            messageEditText.text.clear()
-            hideKeyboard()
-            viewModel.parse(msg)
-        }
+        parseBtn.setOnClickListener { onParseBtnClicked() }
+    }
+
+    private fun onParseBtnClicked() {
+        val msg = messageEditText.text.toString()
+        messageTextView.text = msg
+        messageEditText.text.clear()
+        hideKeyboard()
+        viewModel.parse(msg)
     }
 
     private fun hideKeyboard() {
