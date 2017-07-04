@@ -11,8 +11,8 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * Retrieves the title from each found link and maps them to a
- * [JsonObject] with format = { "url": "link.com", "title": "url title" }
+ * Retrieves the title from each link and maps them to a
+ * [JsonObject] with the format = { "url": "link.com", "title": "url title" }
  */
 @Singleton
 class LinkMapper @Inject constructor(private val searchEndpoints: GoogleSearchEndpoints) : Mapper {
@@ -32,7 +32,7 @@ class LinkMapper @Inject constructor(private val searchEndpoints: GoogleSearchEn
     }
 
     /**
-     * I want to point out that I tried several approaches to retrieve the title from a given URL:
+     * I tried several approaches to retrieve the title from a given URL:
      *
      * 1. Fetching the entire HTML and then use XML parsers like xPath, SAX and XMLPullParser
      * 2. Using a library like JSOUP or which works very well but loads the entire DOM into memory.
@@ -58,7 +58,7 @@ class LinkMapper @Inject constructor(private val searchEndpoints: GoogleSearchEn
                         ?.getAsJsonArray(GoogleSearchEndpoints.ITEMS)
 
                 if (resultArray != null && resultArray.size() == 1) {
-                    return resultArray.get(0)?.asJsonObject
+                    return resultArray.first().asJsonObject
                             ?.get(GoogleSearchEndpoints.TITLE)
                             ?.asString
                 }
@@ -67,6 +67,6 @@ class LinkMapper @Inject constructor(private val searchEndpoints: GoogleSearchEn
             Log.e(LinkMapper::class.java.simpleName, ignored.message)
         }
 
-        return "Title not found :("
+        return "Title not found"
     }
 }
