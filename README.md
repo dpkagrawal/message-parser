@@ -1,6 +1,11 @@
 # message-parser
 Atlassian Coding Exercise
 
+## SINGLE_REQUEST BRANCH
+
+** I figured I could do better if I had an API that would take an array of URLs as an input and return their titles in a single HTTP call, which is what I would expect from a professional application. Since my js skills are a bit rusty I decided to try this on a separate branch.
+Just for fun, I put together a simple endpoint using Firebase Functions and decided to give it a go :) **
+
 Please write a solution that takes a chat message string and returns a JSON string containing information about its contents. Special content to look for includes:
 
 1. @mentions - A way to mention a user. Always starts with an '@' and ends when hitting a non-alphanumeric character. For example, "Hey @andy, are you free for lunch tomorrow?".

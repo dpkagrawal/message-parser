@@ -10,5 +10,5 @@ interface ContentFinder {
      * @return Set<String> containing all extracts of message that conform
      * with the implementation
      */
-    fun findAll(message: String): Set<String>
+    fun findAll(message: String): List<String>
 }

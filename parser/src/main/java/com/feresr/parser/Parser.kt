@@ -9,7 +9,6 @@ import com.google.gson.JsonObject
 import com.google.gson.JsonPrimitive
 import rx.Observable
 import rx.Single
-import rx.schedulers.Schedulers
 
 /**
  * Constructs a [Single] that emit a [JSONNode]
@@ -24,9 +23,9 @@ class Parser constructor(private val finder: ContentFinder,
      * If a [Mapper] is passed in, each map will be performed on a computation thread
      */
     internal fun parse(message: String): Single<JSONNode> {
+
         return Observable.fromCallable({ finder.findAll(message) })
-                .doOnNext { mapper?.bulkAction(it) }
-                .flatMapIterable { it -> it }
+                .doOnNext { mapper?.bulkAction(it.toList()) }
                 .toJsonElement()
                 .collect({ JsonArray() },
                         { array: JsonArray, value ->
@@ -39,17 +38,14 @@ class Parser constructor(private val finder: ContentFinder,
      * Converts each [String] into a [JsonElement], JsonObject OR JsonPrimitive
      * depending on weather or not the mapper is set for this instance
      */
-    private fun Observable<String>.toJsonElement(): Observable<JsonElement> {
+    private fun Observable<List<String>>.toJsonElement(): Observable<JsonElement> {
         if (mapper != null) {
             return this.flatMap {
-                Observable.fromCallable({ mapper.toJsonObject(it) })
-                        .filter({ it != null })
-                        .subscribeOn(Schedulers.computation()) //perform each map on a different thread
+                Observable.zip(rx.Observable.from(it),
+                        mapper.bulkAction(it), { url, title -> mapper.toJsonObject(url, title) })
             }
         } else {
-            return this.map { JsonPrimitive(it) }
+            return this.flatMapIterable { it -> it }.map { JsonPrimitive(it) }
         }
     }
 }
-
-

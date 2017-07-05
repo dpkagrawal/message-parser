@@ -1,11 +1,10 @@
 package com.feresr.atlassianchat.DI
 
+import com.feresr.atlassianchat.LinkMapper
 import com.feresr.atlassianchat.finders.EmoticonFinder
 import com.feresr.atlassianchat.finders.LinkFinder
 import com.feresr.atlassianchat.finders.MentionFinder
-import com.feresr.atlassianchat.networking.GoogleSearchEndpoints
-import com.feresr.atlassianchat.networking.GoogleSearchInterceptor
-import com.feresr.atlassianchat.LinkMapper
+import com.feresr.atlassianchat.networking.MyEndpoints
 import com.feresr.parser.MessageParser
 import com.feresr.parser.Parser
 import com.google.gson.Gson
@@ -27,17 +26,16 @@ class AppModule {
     }
 
     @Provides
-    fun provideGoogleSearchEndpoints(interceptor: GoogleSearchInterceptor): GoogleSearchEndpoints {
-        val okHttpClient = OkHttpClient.Builder()
-                .addInterceptor(interceptor).build()
+    fun provideGoogleSearchEndpoints(): MyEndpoints {
+        val okHttpClient = OkHttpClient.Builder().build()
 
         val retrofit = Retrofit.Builder()
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create(Gson()))
-                .baseUrl(GoogleSearchEndpoints.BASE_URL)
+                .baseUrl(MyEndpoints.BASE_URL)
                 .build()
 
-        return retrofit.create<GoogleSearchEndpoints>(GoogleSearchEndpoints::class.java)
+        return retrofit.create<MyEndpoints>(MyEndpoints::class.java)
     }
 
     @Provides

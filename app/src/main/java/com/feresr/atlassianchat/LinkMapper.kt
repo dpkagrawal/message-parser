@@ -1,12 +1,13 @@
 package com.feresr.atlassianchat
 
 import android.util.Log
-import com.feresr.atlassianchat.networking.GoogleSearchEndpoints
+import com.feresr.atlassianchat.networking.MyEndpoints
 import com.feresr.parser.interfaces.Mapper
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import org.json.JSONObject
 import retrofit2.Response
+import rx.Observable
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -15,7 +16,7 @@ import javax.inject.Singleton
  * [JsonObject] with the format = { "url": "link.com", "title": "url title" }
  */
 @Singleton
-class LinkMapper @Inject constructor(private val searchEndpoints: GoogleSearchEndpoints) : Mapper {
+class LinkMapper @Inject constructor(private val searchEndpoints: MyEndpoints) : Mapper {
 
     val KEY_URL: String = "url"
     val KEY_TITLE: String = "title"
@@ -24,10 +25,10 @@ class LinkMapper @Inject constructor(private val searchEndpoints: GoogleSearchEn
      * @param item the url string
      * @return [JSONObject] with the format { "url": item, "title": getUrtTitle(item) }
      */
-    override fun toJsonObject(item: String): JsonObject {
+    override fun toJsonObject(url: String, title: String): JsonObject {
         val result: JsonObject = JsonObject()
-        result.addProperty(KEY_URL, item)
-        result.addProperty(KEY_TITLE, getUrlTitle(item))
+        result.addProperty(KEY_URL, url)
+        result.addProperty(KEY_TITLE, title)
         return result
     }
 
@@ -46,35 +47,37 @@ class LinkMapper @Inject constructor(private val searchEndpoints: GoogleSearchEn
      * 200OK http code. An error message if the response is not successful or if the
      * request could't be executed at all.
      */
-    private fun getUrlTitle(url: String): String? {
+    private fun getUrlTitle(urls: String): JsonArray? {
 
         try {
-            val response: Response<JsonObject> = searchEndpoints
-                    .titleSearch("info:" + url)
+            val response: Response<JsonArray> = searchEndpoints
+                    .titleSearch(urls)
                     .execute()
-
             if (response.isSuccessful) {
-                val resultArray: JsonArray? = response.body()
-                        ?.getAsJsonArray(GoogleSearchEndpoints.ITEMS)
-
-                if (resultArray != null && resultArray.size() == 1) {
-                    return resultArray.first().asJsonObject
-                            ?.get(GoogleSearchEndpoints.TITLE)
-                            ?.asString
-                }
+                return response.body()
             }
         } catch (ignored: Exception) {
             Log.e(LinkMapper::class.java.simpleName, ignored.message)
         }
-
-        return "Title not found"
+        return JsonArray()
     }
 
-    /**
-     * CHALLENGE SIDE NOTE:
-     * If I had an API that was able to retrieve titles for multiple URL
-     * at a time (on a single http request), which would be optimal for this use case.
-     * I could just perform the call inside this method.
-     */
-    override fun bulkAction(items: Set<String>?) {}
+    override fun bulkAction(items: List<String>?): Observable<String> {
+        if (items != null && items.isNotEmpty()) {
+            val sb: StringBuilder = StringBuilder()
+            sb.append(items.first())
+            for (i in 1 until items.size) {
+                sb.append(',').append(items[i])
+            }
+
+            val titles = ArrayList<String>()
+            val titlesJsonArray = getUrlTitle(sb.toString())
+            if (titlesJsonArray != null) {
+                (0..titlesJsonArray.size() - 1).mapTo(titles) { titlesJsonArray.get(it).asString }
+            }
+            return Observable.from(titles)
+        }
+
+        return Observable.empty()
+    }
 }

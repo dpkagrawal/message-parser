@@ -12,7 +12,7 @@ open class RegexContentFinder(val pattern: Pattern) : ContentFinder {
     /**
      * @return Set of matches within text, or empty set if none
      */
-    override fun findAll(message: String): Set<String> {
+    override fun findAll(message: String): List<String> {
 
         var set = emptySet<String>()
         val matcher: Matcher = pattern.matcher(message)
@@ -20,6 +20,6 @@ open class RegexContentFinder(val pattern: Pattern) : ContentFinder {
             set = set.plus(matcher.group())
         }
 
-        return set
+        return set.toList()
     }
 }
