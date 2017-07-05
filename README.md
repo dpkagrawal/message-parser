@@ -1,8 +1,10 @@
 # message-parser
-Atlassian Coding Exercise
+## Atlassian Coding Exercise
+**Note: The master branch uses the Google Custom Search API to individually fetch each url title on a different HTTP request, which is not optimal. Just for fun, I wanted to see if I could come up with an endpoint that would receive an array of URLs as input and return their titles in order. I implemented the endpoint using Firebase Functions, I can provide the js code for this but please don't judge me based on that ( ⚆ _ ⚆ )
+As my Javascript skills a quite rusty and as I have already ran out of time for this challenge, I implemented this on a separate branch: @see single_request for more info**
 
-** Note: The master branch uses the Google Custom Search API to individually fetch each url title on a different HTTP request, which is not optimal. Just for fun, I wanted to see if I could come up with an endpoint that would receive an array of URLs as input and return their titles in order. I implemented the endpoint using Firebase Functions, I can provide the js code for this but please don't judge me based on that ( ⚆ _ ⚆ )
-As my Javascript skills a quite rusty and as I have already ran out of time for this challenge, I implemented this on a separate branch: @see single_request for more info **
+
+## Challenge:
 
 Please write a solution that takes a chat message string and returns a JSON string containing information about its contents. Special content to look for includes:
 
