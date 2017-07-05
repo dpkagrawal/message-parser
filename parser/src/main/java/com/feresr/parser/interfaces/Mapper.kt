@@ -15,9 +15,4 @@ interface Mapper {
      * @return the [JsonElement] to be inserted in a [JsonArray]
      */
     fun toJsonObject(item: String): JsonObject?
-
-    /**
-     * Perform an action to ALL items retrieved by a [ContentFinder]
-     */
-    fun bulkAction(items: Set<String>?)
 }

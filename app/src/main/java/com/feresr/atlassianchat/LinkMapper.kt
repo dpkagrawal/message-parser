@@ -13,6 +13,12 @@ import javax.inject.Singleton
 /**
  * Retrieves the title from each link and maps them to a
  * [JsonObject] with the format = { "url": "link.com", "title": "url title" }
+ *
+ * CHALLENGE SIDE NOTE:
+ * If I had an API that was able to retrieve titles for multiple URL
+ * at a time (on a single http request), which would be optimal for this use case.
+ * (EDIT: Just for fun, I wanted to see if I could come up with an endpoint that would receive an array of URLs as input and return their titles in order.
+ * As my Javascript skills a quite rusty and as I have already ran out of time for this challenge, I implemented this on a separate branch: @see single_request for more info)
  */
 @Singleton
 class LinkMapper @Inject constructor(private val searchEndpoints: GoogleSearchEndpoints) : Mapper {
@@ -40,6 +46,7 @@ class LinkMapper @Inject constructor(private val searchEndpoints: GoogleSearchEn
      *
      * I asked the interviewer and she said that it was OK to use an API to do the job.
      * I used this approach since its the one I would use in a real world application
+     * Please see BRANCH single_request for more info
      *
      * @param url target URL
      * @return the string inside the html tags <Title></Title> if the request responds with an
@@ -69,12 +76,4 @@ class LinkMapper @Inject constructor(private val searchEndpoints: GoogleSearchEn
 
         return "Title not found"
     }
-
-    /**
-     * CHALLENGE SIDE NOTE:
-     * If I had an API that was able to retrieve titles for multiple URL
-     * at a time (on a single http request), which would be optimal for this use case.
-     * I could just perform the call inside this method.
-     */
-    override fun bulkAction(items: Set<String>?) {}
 }

@@ -25,7 +25,6 @@ class Parser constructor(private val finder: ContentFinder,
      */
     internal fun parse(message: String): Single<JSONNode> {
         return Observable.fromCallable({ finder.findAll(message) })
-                .doOnNext { mapper?.bulkAction(it) }
                 .flatMapIterable { it -> it }
                 .toJsonElement()
                 .collect({ JsonArray() },
