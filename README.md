@@ -1,10 +1,12 @@
 # message-parser
 Atlassian Coding Exercise
 
-## SINGLE_REQUEST BRANCH
+## Single Request branch
 
-** I figured I could do better if I had an API that would take an array of URLs as an input and return their titles in a single HTTP call, which is what I would expect from a professional application. Since my js skills are a bit rusty I decided to try this on a separate branch.
-Just for fun, I put together a simple endpoint using Firebase Functions and decided to give it a go :) **
+**I figured I could do better if I had an API that would take an array of URLs as an input and return their titles in a single HTTP call, which is what I would expect from a professional application. Since my js skills are a bit rusty I decided to try this on a separate branch.
+Just for fun, I put together a simple endpoint using Firebase Functions and decided to give it a go :)**
+
+##Challenge
 
 Please write a solution that takes a chat message string and returns a JSON string containing information about its contents. Special content to look for includes:
 
