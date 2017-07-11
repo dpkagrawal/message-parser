@@ -24,8 +24,8 @@ class Parser constructor(private val finder: ContentFinder,
      * If a [Mapper] is passed in, each map will be performed on a computation thread
      */
     internal fun parse(message: String): Single<JSONNode> {
-        return Observable.fromCallable({ finder.findAll(message) })
-                .flatMapIterable { it -> it }
+        return finder.findAll(message)
+                .distinct()
                 .toJsonElement()
                 .collect({ JsonArray() },
                         { array: JsonArray, value ->
