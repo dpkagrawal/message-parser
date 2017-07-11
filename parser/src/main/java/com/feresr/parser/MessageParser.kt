@@ -1,9 +1,9 @@
 package com.feresr.parser
 
 import com.google.gson.JsonObject
-import rx.Observable
-import rx.Single
-import rx.schedulers.Schedulers
+import io.reactivex.Observable
+import io.reactivex.Single
+import io.reactivex.schedulers.Schedulers
 
 /**
  * Parses a message and creates a [JsonObject] with the nodes provided by each [Parser]
@@ -33,12 +33,11 @@ class MessageParser {
      * @return Single that emits a json formatted string
      */
     fun parse(message: String): Single<JsonObject> {
-        return Observable
-                .from(parsers)
+        return Observable.fromIterable(parsers)
                 .flatMapSingle { it.parse(message).subscribeOn(Schedulers.computation()) }
                 .collect({ JsonObject() },
                         { json: JsonObject, (key, value) ->
                             json.add(key, value)
-                        }).toSingle()
+                        })
     }
 }

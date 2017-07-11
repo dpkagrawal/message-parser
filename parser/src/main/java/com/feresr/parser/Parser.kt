@@ -7,9 +7,9 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.JsonPrimitive
-import rx.Observable
-import rx.Single
-import rx.schedulers.Schedulers
+import io.reactivex.Observable
+import io.reactivex.Single
+import io.reactivex.schedulers.Schedulers
 
 /**
  * Constructs a [Single] that emit a [JSONNode]
@@ -31,7 +31,7 @@ class Parser constructor(private val finder: ContentFinder,
                         { array: JsonArray, value ->
                             array.add(value)
                         })
-                .map { JSONNode(name, it) }.toSingle()
+                .map { JSONNode(name, it) }
     }
 
     /**
@@ -42,7 +42,6 @@ class Parser constructor(private val finder: ContentFinder,
         if (mapper != null) {
             return this.flatMap {
                 Observable.fromCallable({ mapper.toJsonObject(it) })
-                        .filter({ it != null })
                         .subscribeOn(Schedulers.computation()) //perform each map on a different thread
             }
         } else {

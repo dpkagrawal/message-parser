@@ -7,10 +7,8 @@ import com.feresr.parser.MessageParser
 import com.feresr.parser.Parser
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.google.gson.JsonObject
-import rx.SingleSubscriber
-import rx.Subscription
-import rx.android.schedulers.AndroidSchedulers
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -22,7 +20,7 @@ class MainViewModel constructor(application: Application) : AndroidViewModel(app
 
     var outputLiveData = MutableLiveData<String>()
     var isProcessingLiveData = MutableLiveData<Boolean>()
-    private var subscription: Subscription? = null
+    private var disposable: Disposable? = null
 
     @Inject
     lateinit var messageParser: MessageParser
@@ -53,27 +51,24 @@ class MainViewModel constructor(application: Application) : AndroidViewModel(app
      * @param message String to be parsed
      */
     fun parse(message: String) {
-        subscription?.unsubscribe()
+        disposable?.dispose()
         isProcessingLiveData.value = true
 
-        subscription = messageParser.parse(message)
+        disposable = messageParser.parse(message)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(object : SingleSubscriber<JsonObject>() {
-                    override fun onSuccess(result: JsonObject?) {
-                        outputLiveData.value = gson.toJson(result) ?: ""
-                        isProcessingLiveData.value = false
-                    }
-
-                    override fun onError(e: Throwable?) {
-                        isProcessingLiveData.value = false
-                        outputLiveData.value = """There was an error parsing your message:
-                        + ${e?.message ?: "No message available"}"""
-                    }
+                .subscribe({ result ->
+                    outputLiveData.value = gson.toJson(result) ?: ""
+                    isProcessingLiveData.value = false
+                }, {
+                    e ->
+                    isProcessingLiveData.value = false
+                    outputLiveData.value = """There was an error parsing your message:
+                        + ${e.message ?: "No message available"}"""
                 })
     }
 
     override fun onCleared() {
-        subscription?.unsubscribe()
+        disposable?.dispose()
         super.onCleared()
     }
 }
