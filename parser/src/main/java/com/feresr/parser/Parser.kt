@@ -27,10 +27,7 @@ class Parser constructor(private val finder: ContentFinder,
         return finder.findAll(message)
                 .distinct()
                 .toJsonElement()
-                .collect({ JsonArray() },
-                        { array: JsonArray, value ->
-                            array.add(value)
-                        })
+                .collect(::JsonArray, JsonArray::add)
                 .map { JSONNode(name, it) }
     }
 
